@@ -1,10 +1,31 @@
-
-function submitPost() {
-    window.location.href = "Feed.html"
+function handleCheckboxClick(checkbox) {
+  var checkboxes = document.querySelectorAll('input[name="filter-group[]"]')
+  for (var i = 0; i < checkboxes.length; i++){
+    if (checkboxes[i] !== checkbox){
+      checkboxes[i].checked = false;
+    }
+  }
 }
 
+function openModal() {
+  document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+// Function to reload the page after form submission
+function reloadPage() {
+  location.reload();
+}
+
+// function submitPost() {
+//     window.location.href = "Feed.html"
+// }
+
 function cancelAddPost() {
-    window.location.href = "Feed.html"
+  location.reload();
 }
 
 function cancelEdiPost(){
@@ -28,9 +49,19 @@ function closeNav(){
     document.getElementById("main").style.marginLeft = "0";
 }
 
-function logout_alert(){
-    alert("Are you sure you want to logout?");
+function logout_alert() {
+  // Display a confirmation dialog
+  var result = confirm("Are you sure you want to log out?");
+
+  // If the user confirms, redirect to the logout page
+  if (result) {
+      return true;
+  }
+  else{
+    return false;
+  }
 }
+
 
 // Get the modal
 var modal = document.getElementById("myModal");
