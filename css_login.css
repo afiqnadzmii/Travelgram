@@ -62,10 +62,10 @@
     border-radius: 10px;
 }
 
-.home_container{
-    margin-top: 125px;
-    margin-left: 150px;
-}
+/* .home_container{
+    margin-top: 50%;
+    margin-left: 50%;
+} */
 
 .home_container #firstImage{
     position: absolute;
@@ -135,7 +135,7 @@ h2{
 .btn{
     color: #000;
     margin-top: 20px;
-    width: 292px;
+    width: 57%;
     height: 38px;
     /* left: 573px; */
     /* top: 533px; */
@@ -157,10 +157,10 @@ h2{
 
 .form-box .input-box{
     position: relative;
-    width: 292px;
+    width: 70%;
     height: 40px;
     text-align: center;
-    margin-left: 21.5%;
+    margin-left: 15%;
     margin-top: 20px;
     background: rgba(152, 145, 145, 0.17);
     border-radius: 8px;
