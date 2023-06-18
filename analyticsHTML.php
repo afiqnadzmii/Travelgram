@@ -71,7 +71,6 @@ if ($result3->num_rows > 0) {
     $navs_json = json_encode($navs);
 }
 
-
 ?>
 
 <html>
@@ -83,7 +82,7 @@ if ($result3->num_rows > 0) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <meta name="description" content="Our home page">
         <meta name="keywords" content="Web Prog Project">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
     <body>
@@ -130,7 +129,7 @@ if ($result3->num_rows > 0) {
                 <div class="post-item-Analytics">
                     <div class="ratingRatio">
                         <strong>RATING RATIO</strong><br><br>
-                        <canvas id="ratingRatioChart" width="200" height="200"></canvas><br><br>
+                        <div id="ratingRatioChart" style="width:200px; height:200px" ></div>
                         <div class="ratingRatioData">
                             
                             <?php
@@ -149,6 +148,8 @@ if ($result3->num_rows > 0) {
                             $ratingValuesQuery = "SELECT rate, COUNT(*) AS count FROM PostComRate WHERE postID IN (SELECT postID FROM Post WHERE username = '$username') GROUP BY rate";
                             $ratingValuesResult = mysqli_query($conn, $ratingValuesQuery);
 
+                            $ratingData = array(); //initialize an array to hold the rating data
+
                             if ($ratingValuesResult && mysqli_num_rows($ratingValuesResult) > 0) {
                                 while ($row = mysqli_fetch_assoc($ratingValuesResult)) {
                                     $ratingValue = $row['rate'];
@@ -156,7 +157,14 @@ if ($result3->num_rows > 0) {
                                     $percentage = ($count / $numRatings) * 100;
             
                                     // Output the rating value and percentage
-                                    echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
+                                    // echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
+
+                                    // add the rating value, count, and percentage to the rating data array
+                                    $ratingData[] = array(
+                                        'rating'=> $ratingValue,
+                                        'count' => $count,
+                                        'percentage' => round($percentage)
+                                    );
                                 }
 
                             } else {
@@ -174,80 +182,45 @@ if ($result3->num_rows > 0) {
                                     $percentage = ($count / $numRatings) * 100;
             
                                     // Output the rating value and percentage
-                                    echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
-                                }
-                            }
+                                    // echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
 
-                            // Create an array to hold the rating values and counts
-                            $ratingData = array();
-
-                            if ($ratingValuesResult && mysqli_num_rows($ratingValuesResult) > 0) {
-                                while ($row = mysqli_fetch_assoc($ratingValuesResult)) {
-                                    $ratingValue = $row['rate'];
-                                    $count = $row['count'];
-                                    $percentage = ($count / $numRatings) * 100;
-
-                                    // Add the rating value, count, and percentage to the rating data array
+                                    // add the rating value, count and percentage to the rating data array 
                                     $ratingData[] = array(
                                         'rating' => $ratingValue,
                                         'count' => $count,
                                         'percentage' => round($percentage)
                                     );
-
-                                    // Output the rating value and percentage
-                                    echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
-                                }
-                            } 
-                            
-                            else {
-                                // Set default values if the query fails or there are no ratings
-                                $ratingValues = array(
-                                    '5' => 0,
-                                    '4' => 0,
-                                    '3' => 0,
-                                    '2' => 0,
-                                    '1' => 0
-                                    );
-            
-                                    foreach ($ratingValues as $ratingValue => $count) {
-                                        $percentage = ($count / $numRatings) * 100;
-                
-                                        // Output the rating value and percentage
-                                        echo "<p><strong>" . round($percentage) . "%</strong> $ratingValue Stars</p>";
                                 }
                             }
+
                             ?>
+                            <script type="text/javascript">
+                                google.charts.load('current', {'packages':['corechart']});
+                                google.charts.setOnLoadCallback(drawChart);
 
-                            <script>
-                            // Get the canvas element
-                            var chartCanvas = document.getElementById("ratingRatioChart");
-
-                            // Extract the rating labels, counts, and percentages from the PHP rating data
-                            var ratingLabels = <?php echo json_encode(array_column($ratingData, 'rating')); ?>;
-                            var ratingCounts = <?php echo json_encode(array_column($ratingData, 'count')); ?>;
-                            var ratingPercentages = <?php echo json_encode(array_column($ratingData, 'percentage')); ?>;
-
-                            // Create the chart using Chart.js
-                            new Chart(chartCanvas, {
-                                type: 'pie',
-                                data: {
-                                labels: ratingLabels,
-                                datasets: [{
-                                    data: ratingCounts,
-                                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff']
-                                }]
-                                },
-                                options: {
-                                legend: {
-                                    position: 'bottom'
+                                function drawChart() {
+                                    var data = new google.visualization.DataTable();
+                                    data.addColumn('string', 'Rating');
+                                    data.addColumn('number', 'Percentage');
+                                    
+                                    <?php
+                                    // Loop through the rating data array and output the data to JavaScript
+                                    foreach ($ratingData as $rating) {
+                                        echo "data.addRow(['" . $rating['rating'] . "', " . $rating['percentage'] . "]);";
+                                    }
+                                    ?>
+                                    
+                                    var options = {
+                                        backgroundColor: 'transparent',
+                                        width: 400,
+                                        height: 200
+                                    };
+                                    
+                                    var chart = new google.visualization.PieChart(document.getElementById('ratingRatioChart'));
+                                    chart.draw(data, options);
                                 }
-                                }
-                            });
-
-                            // Add console.log statements to check the data
-                            console.log(ratingLabels, ratingCounts, ratingPercentages);
-
                             </script>
+
                             
                         </div>
                     </div>
@@ -291,10 +264,7 @@ if ($result3->num_rows > 0) {
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
         <script>
-            // <!-- src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"> -->
                 function openNav(){
                     document.getElementById("my_sidebar").style.width = "250px";
                     document.getElementById("main").style.marginLeft = "250px";
@@ -312,6 +282,8 @@ if ($result3->num_rows > 0) {
                 }
     
         </script>
+
+        <script src="js_file.js"></script>
 
     </body>
 </html>

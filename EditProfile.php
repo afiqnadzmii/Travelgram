@@ -94,6 +94,39 @@
         $conn->close();
 }
 
+    // Delete account 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+
+        $user = 'root';
+        $pass = '';
+        $db = 'travelgram';
+    
+        $conn = new mysqli('localhost', $user, $pass, $db) or die("Unable to connect");
+
+        $query = "DELETE FROM post WHERE username = '$username'";
+        $result = $conn->query($query);
+
+        $query2 = "DELETE FROM postcomrate WHERE username = '$username'";
+        $result2 = $conn->query($query2);
+
+        // Insert the data into the database
+        $query6 = "DELETE FROM profile WHERE username = '$username'";
+        $result6 = $conn->query($query6);
+    
+        if ($result && $result2 && $result6) {
+            // Success! Data deleted from the database.
+            // Redirect to the feed page to display the updated posts
+            session_destroy();
+            header("Location: Login.php");
+            exit();
+        } else {
+            // Error occurred while inserting data
+            echo "Error: " . $conn->error;
+        }
+        
+        $conn->close();
+    }
+
 $user = 'root';
 $pass = '';
 $db = 'travelgram';
@@ -216,8 +249,9 @@ $conn->close();
                 <br>
 
                 <div>
-                    <button type="submit" style="border-radius: 10px; background-color: #39375b; color: white; width: 80px; border-color: transparent;" name="update">Update</button></a>
-                    <a href="Profile.php"><button type="cancel" style="border-radius: 10px; background-color: #F4F3FF; width: 80px; border-color: transparent;">Cancel</button></a>
+                    <button type="submit" style="border-radius: 10px; background-color: #39375b; color: white; width: 80px; border-color: transparent;" name="update">Update</button>
+                    <a href="Profile.php"><button type="cancel" style="border-radius: 10px; background-color: #F4F3FF; width: 80px; border-color: #39375b;">Cancel</button></a>
+                    <button type="submit" style="border-radius: 10px; background-color: red; color: black; width: 140px; border-color: transparent;" name="delete" onclick="return deleteacc_alert()">Delete Account</button>
                 </div>
                 
             </form>
