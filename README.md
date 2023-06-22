@@ -10,3 +10,4 @@ You also can import our database file called travelgram.sql into your phpmyadmin
 
 Take note to update ForgotPasswordProcess.php file to run the update password process (receiving verification code through email):
 ![image](https://github.com/afiqnadzmii/Travelgram/assets/107661420/b84cb484-7cad-457f-bfc8-174b97064904)
+Line 61, 64, 70
