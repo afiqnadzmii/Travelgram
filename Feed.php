@@ -1,6 +1,10 @@
 <?php
-
 session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: Login.php'); // Redirect to the login page or any other page you prefer
+    exit;
+}
+
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
 }
@@ -129,7 +133,7 @@ $conn->close();
             <button id="openForm" style="margin-bottom: 1rem; border-radius: 10px; background-color: #d9b8c4; color: black; border: transparent; font-weight: 600;" type="button" class="btn btn-secondary btn-lg">Create Post</button>
             <!-- The Modal -->
             <div id="myModal" class="modal">
-
+ sdjnsjdssds
               <!-- Modal content -->
               <div class="modal-content">
                   <!-- <p>Some text in the Modal..</p> -->

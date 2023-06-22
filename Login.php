@@ -1,4 +1,7 @@
 <?php
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 
 $user = 'root';
 $pass = '';
@@ -28,6 +31,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     //check if the login is successful
     if($result->num_rows == 1){
         session_start();
+        $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
         //user is authenticated, redirect to the feed page
         header("Location: Feed.php");
