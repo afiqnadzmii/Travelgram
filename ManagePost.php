@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: Login.php'); // Redirect to the login page or any other page you prefer
+    exit;
+}
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
 }
@@ -171,7 +175,7 @@ if(isset($_SESSION['username'])){
                     <li><a href="Notification.php" class="notification">NOTIFICATION</a></li>
                     <li><a href="Profile.php" class="profile">PROFILE</a></li>
                     <li><a href="analyticsHTML.php" class="analytics">ANALYTICS</a></li>
-                    <li><a href="Login.php" class="logout" onclick="logout_alert()">LOG OUT</a></li>
+                    <li><a href="Logout.php" class="logout" onclick="logout_alert()">LOG OUT</a></li>
                 </ul>
             </nav>
         </div>

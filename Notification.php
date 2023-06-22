@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: Login.php'); // Redirect to the login page or any other page you prefer
+    exit;
+}
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
 }
@@ -11,7 +15,7 @@ $db = 'travelgram';
 
 $conn = new mysqli('localhost', $user, $pass, $db) or die("Unable to connect");
 
-// Query to retrieve the notification date
+// Query to retrieve the notification date  GO TO LINE 90
 $notificationQuery = "SELECT c.postID, u.username, p.title, c.datecreated FROM postcomrate c JOIN profile u ON c.username = u.username JOIN post p ON c.postID = p.postID WHERE p.username = '$username' ORDER BY c.datecreated DESC";
 $notificationResult = mysqli_query($conn, $notificationQuery);
 

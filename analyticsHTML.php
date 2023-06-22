@@ -1,6 +1,10 @@
 <?php
-
 session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: Login.php'); // Redirect to the login page or any other page you prefer
+    exit;
+}
+
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
 }
@@ -34,14 +38,22 @@ if ($ratingResult) {
 }
 
 // Query to retrieve the most popular post
+// $popularPostQuery = "
+//     SELECT p.title 
+//     FROM post p 
+//     JOIN postcomrate r ON p.postID = r.postID 
+//     WHERE p.username = '$username' 
+//     ORDER BY r.rate DESC 
+//     LIMIT 1
+// ";
 $popularPostQuery = "
-    SELECT p.title 
-    FROM post p 
-    JOIN postcomrate r ON p.postID = r.postID 
-    WHERE p.username = '$username' 
-    ORDER BY r.rate DESC 
+    SELECT title 
+    FROM POST 
+    WHERE username = '$username' 
+    ORDER BY averageRate DESC 
     LIMIT 1
 ";
+
 
 $popularPostResult = mysqli_query($conn, $popularPostQuery);
 if ($popularPostResult) {
