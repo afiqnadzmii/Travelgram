@@ -58,16 +58,16 @@ if(check_email_in_database($email, $conn)){
     $mail->Port = 587;
 
     // Set the Gmail username
-    $mail->Username = "iffah.syamimi04@gmail.com";
+    $mail->Username = "your email";
 
     // Set the Gmail password
-    $mail->Password = "rzsskwzxirmvajpk";
+    $mail->Password = "your two steps verification pass";
 
     // Set the email subject
     $mail->Subject = "Verification Code";
 
     // Set the sender email
-    $mail->setFrom("iffah.syamimi04@gmail.com");
+    $mail->setFrom("your email");
 
     // Generate a random 4-digit verification code
     $verification_code = rand(1000, 9999);
